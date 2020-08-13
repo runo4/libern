@@ -1,0 +1,76 @@
+.userIdFont{
+	color: #757575;
+	font-size : 11px;
+	text-align: left;
+	vertical-align : top;
+}
+
+.userNameFont{
+	font-size: 12px;
+	text-align: left;
+	vertical-align : top;
+}
+
+.userIdProfile{
+	color: #757575;
+	font-size : 11px;
+	text-align: center
+}
+
+.userNameProfile{
+	font-size : 12px;
+	text-align: center
+}
+
+.userProfileFont{
+	margin-top: 20px;
+	margin-bottom: 20px;
+	text-align: center;
+}
+
+.postFont{
+	font-size: 12px;
+	padding-left: 20px;
+	padding-right: 20px;
+	vertical-align : top;
+}
+
+.postLengthCount{
+	font-size: 16px;
+	color: #8e9fbc;
+}
+
+.postDateFont{
+	color: #757575;
+	font-size: 11px;
+	text-align: right;
+}
+
+.messageFont{
+	color: #8e9fbc;
+	font-size: 18px;
+	text-align: center;
+}
+
+.resultMessage{
+	font-size: 15px;
+	color: #8e9fbc;
+	text-align: center;
+}
+
+.ffFont{
+	font-size: 14px;
+	color: #8e9fbc;
+	text-align: center;
+}
+
+.followfollower a{
+	text-decoration: none;
+}
+
+.followfollowerLabel{
+	font-size: 18px;
+	color: #333333;
+	text-align: center;
+	padding-bottom: 20px;
+}

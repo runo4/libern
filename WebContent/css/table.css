@@ -1,0 +1,24 @@
+table{
+	width: 100%;
+}
+
+.nameCell{
+	width: 20%;
+}
+
+.postCell{
+	background-color: #ffffff;
+	border-radius: 7px 7px 7px 7px;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.actionCell{
+	height: 25px;
+	colspan: 2;
+	padding: 0px;
+}
+
+.footerCell{
+	colspan: 2;
+}

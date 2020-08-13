@@ -1,0 +1,188 @@
+DROP DATABASE IF EXISTS libern_db;
+CREATE DATABASE libern_db;
+USE libern_db;
+
+
+
+########ユーザー情報を管理するテーブル########
+
+DROP TABLE IF EXISTS userdata;
+
+CREATE TABLE userdata(
+	user_no INTEGER primary key AUTO_INCREMENT,
+	user_id CHAR(24) UNIQUE NOT NULL,
+	password CHAR(24) NOT NULL,
+	user_name CHAR(24) DEFAULT 'No Name',
+	user_image TEXT DEFAULT 'img_upload/default_icon.jpg',
+	user_profile TEXT DEFAULT '',
+	register_date TIMESTAMP NOT NULL,
+	value BOOLEAN NOT NULL DEFAULT 0
+);
+
+INSERT INTO userdata VALUES (
+	1, 'Administrator', 'Administrator', '＠管理者', 'img_upload/icon1.jpg', 'libern管理人です。', TIMESTAMP(NOW()), true
+);
+INSERT INTO userdata VALUES (
+	2, 'TestUser1', 'abc123', '一般ユーザー1', 'img_upload/icon2.jpg', 'libern一般ユーザーの一人です。', TIMESTAMP(NOW()), false
+);
+INSERT INTO userdata VALUES (
+	3, 'TestUser2', 'abc123', '一般ユーザー2', 'img_upload/icon3.jpg', 'libern一般ユーザーの一人です。', TIMESTAMP(NOW()), false
+);
+INSERT INTO userdata VALUES (
+	4, 'dummy1', 'abc123', 'ダミーユーザー1', 'img_upload/dummy.jpg', 'ダミーユーザー1', TIMESTAMP(NOW()), false
+);
+INSERT INTO userdata VALUES (
+	5, 'dummy2', 'abc123', 'ダミーユーザー2', 'img_upload/dummy.jpg', 'ダミーユーザー2', TIMESTAMP(NOW()), false
+);
+INSERT INTO userdata VALUES (
+	6, 'i_suzuki', 'abc123', '鈴木一郎', 'img_upload/default_icon.jpg', 'どうもはじめまして、鈴木一郎です。', TIMESTAMP(NOW()), false
+);
+
+
+
+########投稿データを管理するテーブル########
+
+DROP TABLE IF EXISTS postdata;
+
+CREATE TABLE postdata(
+	id INTEGER primary key AUTO_INCREMENT,
+	user_no INTEGER,
+	message VARCHAR(140) NOT NULL,
+	posted_date TIMESTAMP NOT NULL,
+	FOREIGN KEY (user_no) REFERENCES userdata(user_no)
+	ON DELETE SET NULL ON UPDATE CASCADE
+);
+
+INSERT INTO postdata (user_no, message, posted_date) VALUES(
+	1, '管理者によるテストメッセージNo.1', '2001-01-01 00:00:00'
+);
+
+INSERT INTO postdata (user_no, message, posted_date) VALUES(
+	1, '管理者によるテストメッセージNo.2 長文に対応しているかの確認用', '2001-01-01 00:00:01'
+);
+
+INSERT INTO postdata (user_no, message, posted_date) VALUES(
+	1, '管理者によるテストメッセージNo.3 改行に対応しているかの確認用<br />改行チェック<br /><br />ABCDEFG', '2001-01-01 00:00:02'
+);
+
+INSERT INTO postdata (user_no, message, posted_date) VALUES(
+	2, '一般ユーザー1によるテストメッセージNo.1', '2001-01-01 00:01:00'
+);
+
+INSERT INTO postdata (user_no, message, posted_date) VALUES(
+	2, '一般ユーザー1によるテストメッセージNo.2 <br />改行タグのチェック', '2001-01-01 00:01:01'
+);
+
+INSERT INTO postdata (user_no, message, posted_date) VALUES(
+	3, '一般ユーザー2によるテストメッセージNo.1', '2001-01-01 00:02:00'
+);
+
+INSERT INTO postdata (user_no, message, posted_date) VALUES(
+	3, '一般ユーザー2によるテストメッセージNo.2 <br />改行タグのチェック', '2001-01-01 00:02:01'
+);
+
+INSERT INTO postdata (user_no, message, posted_date) VALUES(
+	1, 'hogehoge <br /> hogehoge', '2011-01-01 00:00:00'
+);
+
+INSERT INTO postdata (user_no, message, posted_date) VALUES(
+	2, 'hogehoge <br /> hogehoge', '2011-01-01 00:01:00'
+);
+
+INSERT INTO postdata (user_no, message, posted_date) VALUES(
+	3, 'hogehoge <br /> hogehoge', '2011-01-01 00:02:00'
+);
+
+INSERT INTO postdata (user_no, message, posted_date) VALUES(
+	1, 'テスト投稿終わり', '2020-01-01 00:00:00'
+);
+
+
+
+########フォロー関係を管理するテーブル########
+
+DROP TABLE IF EXISTS following;
+
+CREATE TABLE following(
+	user_no INTEGER,
+	following_no INTEGER,
+	PRIMARY KEY ( `user_no` , `following_no` )
+);
+
+INSERT INTO following VALUES( 1, 2);
+
+INSERT INTO following VALUES( 1, 3);
+
+INSERT INTO following VALUES( 2, 1);
+
+INSERT INTO following VALUES( 2, 3);
+
+INSERT INTO following VALUES( 3, 1);
+
+INSERT INTO following VALUES( 3, 2);
+
+INSERT INTO following VALUES( 4, 1);
+
+INSERT INTO following VALUES( 4, 2);
+
+INSERT INTO following VALUES( 4, 3);
+
+INSERT INTO following VALUES( 5, 1);
+
+INSERT INTO following VALUES( 5, 2);
+
+INSERT INTO following VALUES( 5, 3);
+
+INSERT INTO following VALUES( 6, 1);
+
+INSERT INTO following VALUES( 6, 2);
+
+INSERT INTO following VALUES( 6, 3);
+
+
+
+#####################################################################
+##################データベース初期化用SQL文ここまで##################
+#####################################################################
+
+
+
+
+
+########抽出に関するSQL文メモ書き########
+
+
+#検索バーに入力したキーワードから投稿に関するデータを抽出するSQL文
+
+SELECT  p.id, p.message, p.posted_date, p.user_no, u.user_id, u.user_name, u.user_image
+FROM postdata p INNER JOIN userdata u ON p.user_no = u.user_no
+WHERE message LIKE ? ORDER BY p.id DESC;
+
+
+
+#指定ユーザーNoに該当するユーザーのフォローしているユーザーを表示する(フォロー)
+
+SELECT u.user_no, u.user_id, u.user_name, u.user_image, u.user_profile 
+FROM userdata u INNER JOIN following f ON u.user_no = f.following_no
+WHERE f.user_no = ?;
+
+
+
+#指定ユーザーNoに該当するユーザーをフォローしているユーザーを表示する(フォロワー)
+
+SELECT u.user_no, u.user_id, u.user_name, u.user_image, u.user_profile 
+FROM userdata u INNER JOIN following f ON u.user_no = f.user_no
+WHERE f.following_no = ?;
+
+
+
+#指定ユーザーNoがフォローしているユーザーと自分の投稿を投稿No降順に表示
+SELECT p.id, p.user_no, p.message, p.posted_date, u.user_id, u.user_name, u.user_image 
+FROM postdata p INNER JOIN userdata u ON p.user_no = u.user_no
+WHERE u.user_no = ?
+UNION ALL
+SELECT p.id, p.user_no, p.message, p.posted_date, u.user_id, u.user_name, u.user_image 
+FROM postdata p INNER JOIN userdata u ON p.user_no = u.user_no
+INNER JOIN following f ON p.user_no = f.following_no
+WHERE f.user_no = ?
+ORDER BY id DESC;

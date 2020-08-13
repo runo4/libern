@@ -1,0 +1,40 @@
+.inTextArea{
+	box-sizing: border-box;
+	resize: none;
+	margin : auto;
+
+	width : 100%;
+	background : #ffffff;             /* 入力域の背景色 */
+	border : 2px solid #aac6c9;   /* 入力域の枠線   */
+	border-radius : 10px;                 /* 入力域の角丸   */
+	padding : 5px 5px;              /* 入力文字の余白 */
+	font-size : 14px;                /* 入力文字サイズ */
+	color : #333333;             /* 入力文字の色   */
+	letter-spacing : .1em;                /* 入力文字の間隔 */
+}
+
+ /* --- 入力フィールドにフォーカスか来たら ----------------*/
+.inTextArea:focus {
+  border-color  : #9dd0d6;                 /* 枠線色     */
+  background    : rgba(157, 208, 214, 0.20);  /* 背景色     */
+  outline       : 0;
+}
+ /* --- 入力説明の文字(標準) -----------------------------*/
+.inTextArea:placeholder-shown {
+  color         : #808080;                 /* 文字色     */
+  font-size     : 17px;                    /* 少し小さく */
+}
+ /* --- 入力説明の文字(Chrome,Safari,Android,iOS等) ---- -*/
+.inTextArea::-webkit-input-placeholder {
+  color         : #808080;                 /* 文字色     */
+  font-size     : 17px;                    /* 少し小さく */
+}
+ /* --- 入力説明の文字(IE用) -----------------------------*/
+.inTextArea:-ms-input-placeholder {
+  color         : #808080;                 /* 文字色     */
+  font-size     : 17px;                    /* 少し小さく */
+}
+ /* --- IEの入力エリア右側×消し -------------------------*/
+.inTextArea::-ms-clear {
+  display     : none;                      /* ×を消す   */
+}
